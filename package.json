@@ -1,0 +1,15 @@
+{
+  "name": "telegram_weather_bot",
+  "version": "1.0.0",
+  "description": "build a telegram weather bot with parsing RSS feed function",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "telegram",
+    "bot"
+  ],
+  "author": "EthanChou",
+  "license": "ISC"
+}
