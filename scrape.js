@@ -1,10 +1,39 @@
 var request = require('request');
 var cheerio = require('cheerio');
+var cn = "";
+var cnOrTw = "";
+var topics = "CurrentWeather";
+// var url = 'http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml";
 
-var scrape = {}
+var scrape = {
+
+
+}
+
+scrape.changeLanguage = function(language, callback) {
+  console.log(language);
+  var msgBack;
+  if (language === "繁體中文") {
+    cn = "";
+    cnOrTw = "_uc";
+    msgBack = "知道了"
+
+  } else if (language === "简体中文"){
+    cn = "gb";
+    cnOrTw = "_uc"
+    msgBack = "知道了"
+  } else {
+    cn = ""
+    cnOrTw = ""
+    msgBack = "No problem"
+  }
+
+  callback(msgBack)
+}
 
 scrape.getSeveralDaysWeatherForecast = function(callback) {
-  request('http://rss.weather.gov.hk/rss/CurrentWeather.xml', function (error, response, html) {
+  topics = "CurrentWeather"
+  request('http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml", function (error, response, html) {
     if (!error && response.statusCode == 200) {
 
      var $ = cheerio.load(html, {
@@ -37,11 +66,13 @@ scrape.getSeveralDaysWeatherForecast = function(callback) {
 // })
 
 scrape.getCurrentWeatherReport = function(callback) {
-  request('http://rss.weather.gov.hk/rss/CurrentWeather.xml', function (error, response, html) {
+  topics = "CurrentWeather"
+  console.log('http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml");
+  request('http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml", function (error, response, html) {
     if (!error && response.statusCode == 200) {
 
       var firstParagraph = html.split('<p>')[1].split('<br/>').join('')
-      // console.log(p);
+      console.log(html);
 
      var $ = cheerio.load(html, {
       xmlMode: true
@@ -56,15 +87,38 @@ scrape.getCurrentWeatherReport = function(callback) {
 
 }
 
-// getCurrentWeatherReport(function(err,firstParagraph,secondParagraph){
-//   console.log(secondParagraph);
-// })
+
+function getCurrentWeatherReport(callback) {
+  topics = "CurrentWeather"
+  console.log('http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml");
+  request('http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml", function (error, response, html) {
+    if (!error && response.statusCode == 200) {
+
+      var firstParagraph = html.split('<p>')[1].split('<br/>').join('')
+      console.log(html);
+
+     var $ = cheerio.load(html, {
+      xmlMode: true
+    });
+     var secondParagraph = $(html.split('<p>')[2].split(']]>')[0]).text();
 
 
+}
+
+   callback(error, firstParagraph, secondParagraph)
+});
+
+}
+
+getCurrentWeatherReport(function(err,firstParagraph,secondParagraph){
+  // console.log(secondParagraph);
+})
 
 
 scrape.getWeatherWarning = function(callback) {
-  request('http://rss.weather.gov.hk/rss/WeatherWarningBulletin.xml', function (error, response, html) {
+  topics = "WeatherWarningBulletin"
+
+  request('http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml", function (error, response, html) {
     if (!error && response.statusCode == 200) {
 
      var $ = cheerio.load(html, {
