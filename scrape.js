@@ -1,7 +1,9 @@
 var request = require('request');
 var cheerio = require('cheerio');
 
-function getSeveralDaysWeatherForecast(callback) {
+var scrape = {}
+
+scrape.getSeveralDaysWeatherForecast = function(callback) {
   request('http://rss.weather.gov.hk/rss/CurrentWeather.xml', function (error, response, html) {
     if (!error && response.statusCode == 200) {
 
@@ -34,7 +36,7 @@ function getSeveralDaysWeatherForecast(callback) {
 //   // console.log(result);
 // })
 
-function getCurrentWeatherReport(callback) {
+scrape.getCurrentWeatherReport = function(callback) {
   request('http://rss.weather.gov.hk/rss/CurrentWeather.xml', function (error, response, html) {
     if (!error && response.statusCode == 200) {
 
@@ -46,22 +48,6 @@ function getCurrentWeatherReport(callback) {
     });
      var secondParagraph = $(html.split('<p>')[2].split(']]>')[0]).text();
 
-     // console.log(html);
-     // var weatherDescription = []
-     // $('description').each(function(){
-     //  weatherDescription.push($(this).html());
-     // });
-     // var newHTML = weatherDescription[1].replace(/<!\[CDATA\[([^\]]+)]\]>/ig, "$1");
-     // // console.log(newHTML);
-     // var tempResult = []
-     // tempResult = $(newHTML).find('p').text().replace(/(\r\n|\n|\r|\t)/gm,"").trim().split(';');
-     // console.log(tempResult);
-     // var arr = $(weatherDescription[1]);
-
-     // var arr = []
-     // arr.push(weatherDescription[1].split('</p>'));
-     // console.log($('description').last().text());
-
 
 }
 
@@ -70,14 +56,14 @@ function getCurrentWeatherReport(callback) {
 
 }
 
-getCurrentWeatherReport(function(err,firstParagraph,secondParagraph){
-  console.log(secondParagraph);
-})
+// getCurrentWeatherReport(function(err,firstParagraph,secondParagraph){
+//   console.log(secondParagraph);
+// })
 
 
 
 
-function getWeatherWarning(callback) {
+scrape.getWeatherWarning = function(callback) {
   request('http://rss.weather.gov.hk/rss/WeatherWarningBulletin.xml', function (error, response, html) {
     if (!error && response.statusCode == 200) {
 
@@ -90,7 +76,7 @@ function getWeatherWarning(callback) {
       weatherDescription.push($(this).text());
      });
 
-     var message = weatherDescription.join(',');
+     var message = weatherDescription.join(', ');
 
 
 }
@@ -104,11 +90,15 @@ function getWeatherWarning(callback) {
 //   // console.log(message);
 // })
 
+scrape.getTopics = function() {
+  return ["current", "warning"].join(', ')
+}
+
+module.exports = scrape;
 
 
-
-
-// if use RssFeedEmitter
+///************************//
+/* if use RssFeedEmitter
 
 // let RssFeedEmitter = require('rss-feed-emitter');
 // let feeder = new RssFeedEmitter();
@@ -142,3 +132,5 @@ function getWeatherWarning(callback) {
 // }
 
 // getSeveralDaysWeatherForecast()
+
+*/
