@@ -1,11 +1,11 @@
 var scrape = require('./scrape');
+var parsingManager = require('./parsingManager');
 var subscribe = require('./subscribe');
 var TelegramBot = require('node-telegram-bot-api');
 
 var token = '258413484:AAEjVM5urOploj6UfwdaewbzkB5TaPJN7oI';
-
 var bot = new TelegramBot(token, {polling: true});
-
+var language = "EN"; //Default
 
 // 繁中，簡中，英文
 // http://rss.weather.gov.hk/rss/WeatherWarningBulletin_uc.xml
@@ -31,30 +31,26 @@ bot.onText(/topics/, function (msg,match) {
   bot.sendMessage(fromId, result);
 });
 
-bot.onText(/tellme current/, function (msg,match) {
+
+bot.onText(/tellme/, function (msg,match) {
+  console.log(msg.text.split(' ')[1]);
+
   var fromId = msg.from.id;
-  scrape.getCurrentWeatherReport(function(err,firstParagraph,secondParagraph){
-    bot.sendMessage(fromId, firstParagraph);
-    bot.sendMessage(fromId, secondParagraph);
-  });
+  var topic = msg.text.split(' ')[1]
+  parsingManager.getTopicUrl(topic, function(message){
+    bot.sendMessage(fromId, message);
+  })
+
 });
 
-bot.onText(/tellme warning/, function (msg,match) {
-  console.log(msg.text.split(' ')[1]);
-  var fromId = msg.from.id;
-  scrape.getWeatherWarning(function(err,message) {
-    console.log(message);
-    bot.sendMessage(fromId, message);
-  });
-});
 
 bot.onText(/繁體中文|简体中文|English/, function (msg,match) {
   var fromId = msg.from.id;
-  console.log(msg.text);
 
-  scrape.changeLanguage(msg.text, function(msgBack){
-    console.log(msgBack);
+  parsingManager.changeLanguage(msg.text, function(langu, msgBack){
+    language = langu;
     bot.sendMessage(fromId, msgBack);
+
   })
 
 });
@@ -78,39 +74,34 @@ bot.onText(/subscribe/, function (msg,match) {
 });
 
 
-// bot.onText(/^subscribe warning/, function (msg,match) {
-//   var fromId = msg.from.id;
-// console.log('w');
-//   subscribe.saveUserSubscribe(true, msg.text.split(' ')[1], msg.from.id, function(backMsg){
-//     bot.sendMessage(fromId, backMsg);
-//   });
 
-// });
+var interval = 10 * 1000; // 3 hour
 
-// bot.onText(/^subscribe current/, function (msg,match) {
-//   var fromId = msg.from.id;
+setInterval(function(){
 
-//   subscribe.saveUserSubscribe(true, msg.text.split(' ')[1], msg.from.id, function(backMsg){
-//     bot.sendMessage(fromId, backMsg);
-//   });
+  var allTopics = scrape.getTopics().split(', ');
+  var topicIndex = 0;
+  for (var i = 0; i < allTopics.length; i++) {
 
-// });
+      console.log(allTopics[topicIndex]);
+    subscribe.getTopicUsers(allTopics[topicIndex],function(result){
+      var userIndex = 0;
 
-// bot.onText(/^unsubscribe warning/, function (msg,match) {
-//   var fromId = msg.from.id;
+      console.log(result);
 
-//   subscribe.saveUserSubscribe(false, msg.text.split(' ')[1], msg.from.id, function(backMsg){
-//     bot.sendMessage(fromId, backMsg);
-//   });
+      for (var j = 0; j < result.res.length; j++) {
 
-// });
+        parsingManager.getTopicUrl(result.topic, function(message){
+          bot.sendMessage(result.res[userIndex], message);
+          console.log(result.res[userIndex]);
+          userIndex++;
+        });
+      };
 
-// bot.onText(/^unsubscribe current/, function (msg,match) {
-//   var fromId = msg.from.id;
 
-//   subscribe.saveUserSubscribe(false, msg.text.split(' ')[1], msg.from.id, function(backMsg){
-//     bot.sendMessage(fromId, backMsg);
-//   });
+    });
+    topicIndex++;
+  };
+}, interval);
 
-// });
 
