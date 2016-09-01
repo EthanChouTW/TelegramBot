@@ -3,7 +3,15 @@ var cheerio = require('cheerio');
 
 var scrape = {};
 
+
 scrape.parseCurrentWeather = function(langu,html,callback) {
+
+
+  var firstParagraph = html.split('<p>')[1].split('<br/>').join('')
+  var $ = cheerio.load(html, {
+    xmlMode: true
+  });
+  var secondParagraph = $(html.split('<p>')[2].split(']]>')[0]).text();
 
 
   var $ = cheerio.load(html, {
@@ -33,7 +41,9 @@ scrape.parseWarning = function(html,callback) {
   weatherDescription.push($(this).text());
 });
 
+
  var message = weatherDescription.join(', ').split('<br/>').join(' ');
+
 
  callback(message);
 }

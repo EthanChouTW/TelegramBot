@@ -24,6 +24,7 @@ bot.onText(/topics/, function (msg,match) {
 
 bot.onText(/tellme/, function (msg,match) {
 
+
   var fromId = msg.from.id;
   var topic = msg.text.split(' ')[1]
   parsingManager.getTopicUrl(topic, function(message){
@@ -65,7 +66,7 @@ bot.onText(/subscribe/, function (msg,match) {
 
 
 
-var interval = 24 * 3600 * 1000; // 24 hour
+var interval = 24 * 3600 * 1000; // 24 hours
 
 setInterval(function(){
 

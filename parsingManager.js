@@ -11,6 +11,7 @@ parsingManager.changeLanguage = function(language, callback) {
 
   var msgBack;
 
+
   if (language === "繁體中文") {
     cn = "";
     cnOrTw = "_uc";
@@ -60,7 +61,9 @@ parsingManager.getTopicUrl = function(topic,callback) {
 
 parsingManager.parseHtmlByTopic = function(topic,html,callback) {
   if (topic == "current") {
+
     scrape.parseCurrentWeather(langu, html,function(message){
+
       callback(message);
     })
   } else if (topic == "warning") {
