@@ -7,21 +7,11 @@ var token = '258413484:AAEjVM5urOploj6UfwdaewbzkB5TaPJN7oI';
 var bot = new TelegramBot(token, {polling: true});
 var language = "EN"; //Default
 
-// 繁中，簡中，英文
-// http://rss.weather.gov.hk/rss/WeatherWarningBulletin_uc.xml
-// http://gbrss.weather.gov.hk/rss/WeatherWarningBulletin_uc.xml
-// http://rss.weather.gov.hk/rss/WeatherWarningBulletin.xml
-
-
-//
-// http://rss.weather.gov.hk/rss/CurrentWeather.xml
-// http://rss.weather.gov.hk/rss/CurrentWeather_uc.xml
-// http://gbrss.weather.gov.hk/rss/CurrentWeather_uc.xml
 
 bot.onText(/enen/, function (msg,match) {
   var fromId = msg.from.id;
   var resp = match[1];
-  // console.log(match);
+
   bot.sendMessage(fromId, "hello hello");
 });
 
@@ -33,7 +23,6 @@ bot.onText(/topics/, function (msg,match) {
 
 
 bot.onText(/tellme/, function (msg,match) {
-  console.log(msg.text.split(' ')[1]);
 
   var fromId = msg.from.id;
   var topic = msg.text.split(' ')[1]
@@ -42,6 +31,7 @@ bot.onText(/tellme/, function (msg,match) {
   })
 
 });
+
 
 
 bot.onText(/繁體中文|简体中文|English/, function (msg,match) {
@@ -75,7 +65,7 @@ bot.onText(/subscribe/, function (msg,match) {
 
 
 
-var interval = 10 * 1000; // 3 hour
+var interval = 24 * 3600 * 1000; // 24 hour
 
 setInterval(function(){
 
@@ -83,17 +73,15 @@ setInterval(function(){
   var topicIndex = 0;
   for (var i = 0; i < allTopics.length; i++) {
 
-      console.log(allTopics[topicIndex]);
+
     subscribe.getTopicUsers(allTopics[topicIndex],function(result){
       var userIndex = 0;
-
-      console.log(result);
 
       for (var j = 0; j < result.res.length; j++) {
 
         parsingManager.getTopicUrl(result.topic, function(message){
           bot.sendMessage(result.res[userIndex], message);
-          console.log(result.res[userIndex]);
+
           userIndex++;
         });
       };
@@ -103,5 +91,7 @@ setInterval(function(){
     topicIndex++;
   };
 }, interval);
+
+
 
 

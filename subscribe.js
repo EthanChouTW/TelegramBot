@@ -20,8 +20,7 @@ subscribe.saveUserSubscribe = function(save, topics, userID, callback) {
   }
 
   Parse.Cloud.run('saveUserSubscribe',body).then(function(res) {
-    console.log("call cloud");
-    console.log(res);
+
     callback(res);
   });
   } else {
@@ -31,12 +30,12 @@ subscribe.saveUserSubscribe = function(save, topics, userID, callback) {
 }
 
 subscribe.getTopicUsers = function(topics, callback){
-  console.log('hello');
+
   var body = {
     topics: topics
   }
   Parse.Cloud.run('getTopicUsers',body).then(function(res) {
-    console.log("call cloud");
+
     var result = {
       topic: topics,
       res: res

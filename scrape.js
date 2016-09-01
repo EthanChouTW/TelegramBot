@@ -3,15 +3,22 @@ var cheerio = require('cheerio');
 
 var scrape = {};
 
-scrape.parseCurrentWeather = function(html,callback) {
+scrape.parseCurrentWeather = function(langu,html,callback) {
 
-  var firstParagraph = html.split('<p>')[1].split('<br/>').join('')
+
   var $ = cheerio.load(html, {
     xmlMode: true
   });
+
+  var firstParagraph;
+  if (langu === "EN") {
+  firstParagraph = $("description").last().first('p').text().split('<br/>').join('').split('<font')[0].split('<p>')[1];
+  } else {
+  firstParagraph = $("description").last().first('p').text().split('<br/>').join('').split('<font')[0].split(';">')[1];
+  }
+  // if need other place
   var secondParagraph = $(html.split('<p>')[2].split(']]>')[0]).text();
 
-   // callback(error, firstParagraph, secondParagraph)
    callback(firstParagraph);
  }
 
@@ -26,7 +33,7 @@ scrape.parseWarning = function(html,callback) {
   weatherDescription.push($(this).text());
 });
 
- var message = weatherDescription.join(', ');
+ var message = weatherDescription.join(', ').split('<br/>').join(' ');
 
  callback(message);
 }

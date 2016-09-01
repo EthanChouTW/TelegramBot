@@ -5,12 +5,12 @@ var cheerio = require('cheerio');
 var parsingManager = {};
 var cn = "";
 var cnOrTw = "";
-
+var langu = "EN"
 
 parsingManager.changeLanguage = function(language, callback) {
-  console.log(language);
+
   var msgBack;
-  var langu;
+
   if (language === "繁體中文") {
     cn = "";
     cnOrTw = "_uc";
@@ -35,7 +35,7 @@ parsingManager.changeLanguage = function(language, callback) {
 
 parsingManager.getTopicUrl = function(topic,callback) {
   var topics;
-  console.log("topic = " + topic);
+
   if (topic === "current") {
     topics = "CurrentWeather";
   } else if (topic === "warning"){
@@ -60,7 +60,7 @@ parsingManager.getTopicUrl = function(topic,callback) {
 
 parsingManager.parseHtmlByTopic = function(topic,html,callback) {
   if (topic == "current") {
-    scrape.parseCurrentWeather(html,function(message){
+    scrape.parseCurrentWeather(langu, html,function(message){
       callback(message);
     })
   } else if (topic == "warning") {
