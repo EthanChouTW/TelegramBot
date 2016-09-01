@@ -6,7 +6,7 @@ var TelegramBot = require('node-telegram-bot-api');
 var token = '258413484:AAEjVM5urOploj6UfwdaewbzkB5TaPJN7oI';
 var bot = new TelegramBot(token, {polling: true});
 var language = "EN"; //Default
-
+var warningBeforeUpdate = "";
 
 bot.onText(/enen/, function (msg,match) {
   var fromId = msg.from.id;
@@ -66,7 +66,7 @@ bot.onText(/subscribe/, function (msg,match) {
 
 
 
-var interval = 24 * 3600 * 1000; // 24 hours
+var interval = 3 * 3600 * 1000; // 3 hours
 
 setInterval(function(){
 
@@ -81,6 +81,13 @@ setInterval(function(){
       for (var j = 0; j < result.res.length; j++) {
 
         parsingManager.getTopicUrl(result.topic, function(message){
+          if (result.topic === "warning") {
+            if (warningBeforeUpdate === message) {
+              console.log(warningBeforeUpdate)
+              return
+            }
+            warningBeforeUpdate = message;
+          }
           bot.sendMessage(result.res[userIndex], message);
 
           userIndex++;
