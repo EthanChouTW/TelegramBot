@@ -1,5 +1,6 @@
 var request = require('request');
 var cheerio = require('cheerio');
+
 var cn = "";
 var cnOrTw = "";
 var topics = "CurrentWeather";
@@ -30,6 +31,18 @@ scrape.changeLanguage = function(language, callback) {
 
   callback(msgBack)
 }
+
+// function getTopicUrl(topic) {
+// xxxx
+// }
+
+// function parseHtmlByTopic(topic,html) {
+
+// }
+
+// function parseCurrentWeather(html) {
+
+// }
 
 scrape.getSeveralDaysWeatherForecast = function(callback) {
   topics = "CurrentWeather"
@@ -67,7 +80,7 @@ scrape.getSeveralDaysWeatherForecast = function(callback) {
 
 scrape.getCurrentWeatherReport = function(callback) {
   topics = "CurrentWeather"
-  console.log('http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml");
+  // console.log('http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml");
   request('http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml", function (error, response, html) {
     if (!error && response.statusCode == 200) {
 
@@ -79,7 +92,6 @@ scrape.getCurrentWeatherReport = function(callback) {
     });
      var secondParagraph = $(html.split('<p>')[2].split(']]>')[0]).text();
 
-
 }
 
    callback(error, firstParagraph, secondParagraph)
@@ -88,31 +100,6 @@ scrape.getCurrentWeatherReport = function(callback) {
 }
 
 
-function getCurrentWeatherReport(callback) {
-  topics = "CurrentWeather"
-  console.log('http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml");
-  request('http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml", function (error, response, html) {
-    if (!error && response.statusCode == 200) {
-
-      var firstParagraph = html.split('<p>')[1].split('<br/>').join('')
-      console.log(html);
-
-     var $ = cheerio.load(html, {
-      xmlMode: true
-    });
-     var secondParagraph = $(html.split('<p>')[2].split(']]>')[0]).text();
-
-
-}
-
-   callback(error, firstParagraph, secondParagraph)
-});
-
-}
-
-getCurrentWeatherReport(function(err,firstParagraph,secondParagraph){
-  // console.log(secondParagraph);
-})
 
 
 scrape.getWeatherWarning = function(callback) {
