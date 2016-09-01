@@ -34,8 +34,8 @@ bot.onText(/topics/, function (msg,match) {
 bot.onText(/tellme current/, function (msg,match) {
   var fromId = msg.from.id;
   scrape.getCurrentWeatherReport(function(err,firstParagraph,secondParagraph){
-      bot.sendMessage(fromId, firstParagraph);
-      bot.sendMessage(fromId, secondParagraph);
+    bot.sendMessage(fromId, firstParagraph);
+    bot.sendMessage(fromId, secondParagraph);
   });
 });
 
@@ -59,39 +59,58 @@ bot.onText(/繁體中文|简体中文|English/, function (msg,match) {
 
 });
 
-bot.onText(/^subscribe warning/, function (msg,match) {
+
+bot.onText(/subscribe/, function (msg,match) {
+
   var fromId = msg.from.id;
-console.log('w');
-  subscribe.saveUserSubscribe(true, msg.text.split(' ')[1], msg.from.id, function(backMsg){
+  var subscribeDescription = msg.text.split(' ')[0];
+  var subscribeOrNot;
+  if (subscribeDescription === "subscribe") {
+    subscribeOrNot = true;
+  } else if (subscribeDescription === "unsubscribe"){
+    subscribeOrNot = false;
+  }
+
+  subscribe.saveUserSubscribe(subscribeOrNot, msg.text.split(' ')[1], msg.from.id, function(backMsg){
     bot.sendMessage(fromId, backMsg);
   });
 
 });
 
-bot.onText(/^subscribe current/, function (msg,match) {
-  var fromId = msg.from.id;
-console.log(' c');
-  subscribe.saveUserSubscribe(true, msg.text.split(' ')[1], msg.from.id, function(backMsg){
-    bot.sendMessage(fromId, backMsg);
-  });
 
-});
+// bot.onText(/^subscribe warning/, function (msg,match) {
+//   var fromId = msg.from.id;
+// console.log('w');
+//   subscribe.saveUserSubscribe(true, msg.text.split(' ')[1], msg.from.id, function(backMsg){
+//     bot.sendMessage(fromId, backMsg);
+//   });
 
-bot.onText(/^unsubscribe warning/, function (msg,match) {
-  var fromId = msg.from.id;
-  console.log('un w');
-  subscribe.saveUserSubscribe(false, msg.text.split(' ')[1], msg.from.id, function(backMsg){
-    bot.sendMessage(fromId, backMsg);
-  });
+// });
 
-});
+// bot.onText(/^subscribe current/, function (msg,match) {
+//   var fromId = msg.from.id;
 
-bot.onText(/^unsubscribe current/, function (msg,match) {
-  var fromId = msg.from.id;
-console.log('un c');
-  subscribe.saveUserSubscribe(false, msg.text.split(' ')[1], msg.from.id, function(backMsg){
-    bot.sendMessage(fromId, backMsg);
-  });
+//   subscribe.saveUserSubscribe(true, msg.text.split(' ')[1], msg.from.id, function(backMsg){
+//     bot.sendMessage(fromId, backMsg);
+//   });
 
-});
+// });
+
+// bot.onText(/^unsubscribe warning/, function (msg,match) {
+//   var fromId = msg.from.id;
+
+//   subscribe.saveUserSubscribe(false, msg.text.split(' ')[1], msg.from.id, function(backMsg){
+//     bot.sendMessage(fromId, backMsg);
+//   });
+
+// });
+
+// bot.onText(/^unsubscribe current/, function (msg,match) {
+//   var fromId = msg.from.id;
+
+//   subscribe.saveUserSubscribe(false, msg.text.split(' ')[1], msg.from.id, function(backMsg){
+//     bot.sendMessage(fromId, backMsg);
+//   });
+
+// });
 

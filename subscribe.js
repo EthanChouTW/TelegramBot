@@ -1,3 +1,4 @@
+var scrape = require('./scrape');
 var Parse = require('parse/node').Parse;
  Parse.initialize('EthanIsTheBestCookInTheWorld', null,'YouDebt');
  Parse.serverURL = 'http://ethankitchen.herokuapp.com/parse/';
@@ -9,6 +10,9 @@ var Parse = require('parse/node').Parse;
 
 subscribe.saveUserSubscribe = function(save, topics, userID, callback) {
   console.log("saveUserSubscribe");
+  console.log(scrape.getTopics().split(','));
+  console.log(topics);
+  if (scrape.getTopics().split(', ').includes(topics)) {
   var body = {
     topics: topics,
     userID: userID,
@@ -20,6 +24,9 @@ subscribe.saveUserSubscribe = function(save, topics, userID, callback) {
     console.log(res);
     callback(res);
   });
+  } else {
+    callback('We no support this topics');
+  }
 
 }
 
