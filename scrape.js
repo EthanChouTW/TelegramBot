@@ -6,8 +6,8 @@ var scrape = {};
 
 scrape.parseCurrentWeather = function(langu,html,callback) {
 
-
-  var firstParagraph = html.split('<p>')[1].split('<br/>').join('')
+  // for debug
+  // var firstParagraph = html.split('<p>')[1].split('<br/>').join('')
   var $ = cheerio.load(html, {
     xmlMode: true
   });
@@ -19,10 +19,11 @@ scrape.parseCurrentWeather = function(langu,html,callback) {
   });
 
   var firstParagraph;
+  console.log(langu);
   if (langu === "EN") {
   firstParagraph = $("description").last().first('p').text().split('<br/>').join('').split('<font')[0].split('<p>')[1];
   } else {
-  firstParagraph = $("description").last().first('p').text().split('<br/>').join('').split('<font')[0].split(';">')[1];
+  firstParagraph = $("description").last().first('p').text().split('<br/>').join('').split('<font')[0].split(';">')[1].split('<p>')[1];
   }
   // if need other place
   var secondParagraph = $(html.split('<p>')[2].split(']]>')[0]).text();

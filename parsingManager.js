@@ -5,7 +5,7 @@ var cheerio = require('cheerio');
 var parsingManager = {};
 var cn = "";
 var cnOrTw = "";
-var langu = "EN"
+var langu = "TW"
 
 parsingManager.changeLanguage = function(language, callback) {
 
@@ -34,6 +34,8 @@ parsingManager.changeLanguage = function(language, callback) {
 }
 
 
+
+
 parsingManager.getTopicUrl = function(topic,callback) {
   var topics;
 
@@ -58,6 +60,8 @@ parsingManager.getTopicUrl = function(topic,callback) {
   });
 
 }
+
+
 
 parsingManager.parseHtmlByTopic = function(topic,html,callback) {
   if (topic == "current") {
