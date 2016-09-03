@@ -23,7 +23,7 @@ scrape.parseCurrentWeather = function(langu,html,callback) {
   if (langu === "EN") {
   firstParagraph = $("description").last().first('p').text().split('<br/>').join('').split('<font')[0].split('<p>')[1];
   } else {
-  firstParagraph = $("description").last().first('p').text().split('<br/>').join('').split('<font')[0].split(';">')[1].split('<p>')[1];
+  firstParagraph = $("description").last().first('p').text().split('<br/>').join('').split('<font')[0].split(';">')[1].split('<p>')[0];
   }
   // if need other place
   var secondParagraph = $(html.split('<p>')[2].split(']]>')[0]).text();
