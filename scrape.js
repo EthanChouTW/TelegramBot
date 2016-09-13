@@ -3,6 +3,20 @@ var cheerio = require('cheerio');
 
 var scrape = {};
 
+scrape.request = function() {
+   request(url, function (error, response, html) {
+    if (!error && response.statusCode == 200) {
+      parsingManager.parseHtmlByTopic(topic,html,function(message){
+        callback(message);
+      })
+    } else {
+      callback(error);
+    }
+  });
+}
+
+scrape.accept = funtion(){}
+
 
 scrape.parseCurrentWeather = function(langu,html,callback) {
 

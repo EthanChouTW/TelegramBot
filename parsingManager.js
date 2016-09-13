@@ -7,6 +7,19 @@ var cn = "";
 var cnOrTw = "";
 var langu = "TW"
 
+parsingObject = {
+  language;
+  topic;
+  url;
+}
+
+language = {
+  cn;
+  cnOrTw;
+  langu;
+  msgBack;
+}
+
 parsingManager.changeLanguage = function(language, callback) {
 
   var msgBack;
@@ -49,32 +62,16 @@ parsingManager.getTopicUrl = function(topic,callback) {
 
   var url = 'http://'+ cn +'rss.weather.gov.hk/rss/' + topics + cnOrTw + ".xml";
 
-  request(url, function (error, response, html) {
-    if (!error && response.statusCode == 200) {
-      parsingManager.parseHtmlByTopic(topic,html,function(message){
-        callback(message);
-      })
-    } else {
-      callback(error);
-    }
-  });
+  scrape.request(url, callback);
+
 
 }
 
 
 
 parsingManager.parseHtmlByTopic = function(topic,html,callback) {
-  if (topic == "current") {
+  scrape.accept(topic, callback)
 
-    scrape.parseCurrentWeather(langu, html,function(message){
-
-      callback(message);
-    })
-  } else if (topic == "warning") {
-    scrape.parseWarning(html,function(message){
-      callback(message);
-    })
-  }
 }
 
 module.exports = parsingManager;
