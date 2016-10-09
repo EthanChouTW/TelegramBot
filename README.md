@@ -2,6 +2,7 @@
 
 
 [Bot link](https://telegram.me/EthanWeatherBot)
+<p>runnning on AWS EC2</p>
 
 ##Intro: 
 <p>monitor the feed provided by the gov (https://data.gov.hk/en-data/provider/hk-hko) and relay the update to user via telegram bot</p>
