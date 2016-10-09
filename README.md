@@ -8,6 +8,8 @@
 <p>monitor the feed provided by the gov (https://data.gov.hk/en-data/provider/hk-hko) and relay the update to user via telegram bot</p>
 
 ##Use:
+Subscribe: [Bot link](https://telegram.me/EthanWeatherBot)
+or
 clone this project and
 ``npm install``
 ``npm start``
